@@ -2,21 +2,16 @@
 
     $array = ["Manolo", "Pablo", "Juan", "Luz", "Mercedes"];
 
-   function maxMin($array){
+    function len ($cadena){
+        return strlen($cadena);
+    }
 
-    print_r( $array);
-    $max [] = array_map('max', $array);
+    $array = array_map('len', $array);
 
-    echo "La cadena de mayor tamaño de tu array es: " . $max;
-
-    $min = array_map('min', $array);
-
-    echo "La cadena de menor tamaño de tu array es: " . $min;
-
-
-   }
+    $max = max($array);
+    $min = min($array);
         
 
-   maxMin($array);
+    echo "La máxima cadena és: " . $max . " y la mínima: " . $min;
 
 ?>
