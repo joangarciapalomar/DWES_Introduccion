@@ -15,7 +15,7 @@
     <title>Document</title>
 </head>
 <body>
-    hola <?= $_SESSION['username']?><br>
+    Hola <?= $_SESSION['username']?><br>
     <a href="logout.php">Cerrar Sesión</a>
 </body>
 </html>

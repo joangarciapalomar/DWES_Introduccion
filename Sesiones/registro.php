@@ -2,11 +2,12 @@
 require('../CRUD/conexion.php');
 
 $errores = [];
+    $usuario = $email = $contraseña = $contraRep = "";
     if (isset($_POST['submit'])){
-        $usuario = $_POST['usuario'];
-        $email = $_POST['email'];
-        $contraseña = $_POST['contraseña'];
-        $contraRep = $_POST['contraRepe'];
+        $usuario = $_POST['usuario'] ?? "";
+        $email = $_POST['email'] ?? "";
+        $contraseña = $_POST['contraseña'] ?? "";
+        $contraRep = $_POST['contraRepe'] ?? "";
         if (empty($usuario)){
             $errores[] = "El usuario no debe estar vacío.";
         }
@@ -21,29 +22,34 @@ $errores = [];
             $errores[] = "Las contraseñas no coinciden";
         }
         
-        if($usuario && $contraseña){
-            $insert = "INSERT INTO users (username, email, password) VALUES ('$usuario', '$email', '$contraseña')";
-            $pdoSt = $pdo->prepare($insert);
-            $valores = $pdoSt->execute();
-
+        try {
             if($usuario && $contraseña){
-                $select = "SELECT * FROM users WHERE username = ? AND password = ?";
-                $pdoSt = $pdo->prepare($select);
-                $pdoSt-> bindValue(1, $usuario);
-                $pdoSt-> bindValue(2, $contraseña);
-    
+                $insert = "INSERT INTO users (username, email, password) VALUES ('$usuario', '$email', '$contraseña')";
+                $pdoSt = $pdo->prepare($insert);
                 $valores = $pdoSt->execute();
     
-                $log = $pdoSt->fetch();
-    
-                if ($log){
-                    $_SESSION['username'] = $usuario;
-                    header('location: login.php');
-                }else{
-                    $errores[] = "Error en la creación del Usuario";
+                    if($usuario && $contraseña){
+                    $select = "SELECT * FROM users WHERE username = ? AND password = ?";
+                    $pdoSt = $pdo->prepare($select);
+                    $pdoSt-> bindValue(1, $usuario);
+                    $pdoSt-> bindValue(2, $contraseña);
+        
+                    $valores = $pdoSt->execute();
+        
+                    $log = $pdoSt->fetch();
+        
+                    if ($log){
+                        $_SESSION['username'] = $usuario;
+                        header('location: login.php');
+                    }else{
+                        $errores[] = "Error en la creación del Usuario";
+                    }
                 }
             }
+        } catch (PDOException $e) {
+            echo "<ul><li>Credenciales incorrectas</li></ul>";
         }
+        
     }
 
 ?>
@@ -66,11 +72,12 @@ $errores = [];
 
     ?>
     <form action="registro.php" method="POST">
-    Usuario:<input type="text" name="usuario"><br>
-    Email:<input type="email" name="email"><br>
+    Usuario:<input type="text" name="usuario" value=<?= $usuario ?>> <br>
+    Email:<input type="email" name="email" value=<?= $email ?>><br>
     Contraseña:<input type="password" name="contraseña"><br>
     Repite la contraseña:<input type="password" name="contraRepe"><br>
     <input type="submit" name="submit" value="Enviar">
     </form>
+    <a href="login.php">Volver al Login</a>
 </body>
 </html>

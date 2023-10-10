@@ -68,5 +68,6 @@ $errores = [];
     Contraseña:<input type="password" name="contraseña"><br>
     <input type="submit" name="submit" value="Enviar">
     </form>
+    <a href="registro.php">Registrate aquí</a>
 </body>
 </html>
